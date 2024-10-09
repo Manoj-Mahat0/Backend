@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Successful</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .success-box {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 450px;
+            width: 100%;
+        }
+
+        .success-box h1 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+
+        .success-box p {
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        .details {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .detail-item .label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .detail-item .value {
+            color: #555;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .failed-box {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .failed-box h1 {
+            color: #D9534F;
+            margin-bottom: 20px;
+        }
+
+        .failed-box p {
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        .btn,
+        .btn-secondary {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 5px;
+            display: inline-block;
+        }
+
+        .btn {
+            background-color: #D9534F;
+            color: white;
+        }
+
+        .btn:hover {
+            background-color: #C9302C;
+        }
+
+        .btn-secondary {
+            background-color: #f0ad4e;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #ec971f;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .maintenance-box {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .maintenance-box h1 {
+            color: #5bc0de;
+            margin-bottom: 20px;
+        }
+
+        .maintenance-box p {
+            color: #555;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="success-box">
+            <h1>Payment Successful!</h1>
+            <p>Thank you for your payment. Your transaction was successful.</p>
+            <div class="details">
+                <div class="detail-item">
+                    <span class="label">Amount Paid:</span>
+                    <span class="value" id="amountPaid"></span>
+                </div>
+                <div class="detail-item">
+                    <span class="label">Transaction ID:</span>
+                    <span class="value" id="transactionId"></span>
+                </div>
+                <div class="detail-item">
+                    <span class="label">Validity:</span>
+                    <span class="value" id="validity"></span>
+                </div>
+                <div class="detail-item">
+                    <span class="label">User Name:</span>
+                    <span class="value" id="userName"></span>
+                </div>
+                <div class="detail-item">
+                    <span class="label">Email:</span>
+                    <span class="value" id="email"></span>
+                </div>
+                <div class="detail-item">
+                    <span class="label">Subscription Plan:</span>
+                    <span class="value" id="subscription"></span>
+                </div>
+            </div>
+            <a class="btn" href="https://66c9c11d2f99f176f8919863--dulcet-moonbeam-6ec840.netlify.app/" >Go to Dashboard</a>
+        </div>
+    </div>
+
+    <script>
+
+        const amountPaid = document.getElementById('amountPaid');
+        const transactionId = document.getElementById('transactionId');
+        const validity = document.getElementById('validity');
+        const userName = document.getElementById('userName');
+        const email = document.getElementById('email');
+        const subscription = document.getElementById('subscription');
+
+        let merchantTransactionId = new URL(location).pathname.split('/').pop();
+
+        fetch(`/api/v1/order/info/${merchantTransactionId}`)
+            .then(response => {
+                if (!response.ok) {
+                    window.location.href = '/maintainance';
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Display the fetched data
+                switch (data.status) {
+                    case "Failed":
+                    // uphrxkbkwm0dz5d3o
+                        window.history.replaceState({}, '', location.pathname);
+                        window.location.href = '/payment-failed';
+                        break;
+
+                    case "Success":
+                        
+                    console.log(window.location, window.history);
+                    
+                        amountPaid.textContent = data.amountPaid;
+                        transactionId.textContent = data.transactionId;
+                        validity.textContent = data.validity;
+                        userName.textContent = data.userName;
+                        email.textContent = data.email;
+                        subscription.textContent = data.subscription;
+
+                        break;
+
+                    default:
+                        window.location.href = '/maintainance';
+                        break;
+                }
+
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+                window.location.href = '/maintainance';
+            });
+
+    </script>
+</body>
+
+</html>
